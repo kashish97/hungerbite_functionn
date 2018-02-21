@@ -14,10 +14,10 @@ System.setProperty("webdriver.chrome.driver","/Users/kashishgupta/eclipse-worksp
 WebDriver driver = new ChromeDriver();
 driver.navigate().to("http://mail.google.com");
 driver.manage().timeouts().implicitlyWait(3,TimeUnit.SECONDS);
-driver.findElement(By.cssSelector("#identifierId")).sendKeys("nipunrg29@gmail.com");
+driver.findElement(By.cssSelector("#identifierId")).sendKeys("YourEmail");
 driver.findElement(By.cssSelector("#identifierNext")).click();
 driver.manage().timeouts().implicitlyWait(2,TimeUnit.SECONDS);
-driver.findElement(By.cssSelector("#password > div.aCsJod.oJeWuf > div > div.Xb9hP > input")).sendKeys("Nipun2001");
+driver.findElement(By.cssSelector("#password > div.aCsJod.oJeWuf > div > div.Xb9hP > input")).sendKeys("YourPassword");
 driver.findElement(By.cssSelector("#passwordNext > content")).click();
 driver.manage().timeouts().implicitlyWait(5,TimeUnit.SECONDS);
 
