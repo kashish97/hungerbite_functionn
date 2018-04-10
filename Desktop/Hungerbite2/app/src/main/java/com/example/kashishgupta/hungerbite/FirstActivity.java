@@ -3,6 +3,8 @@ package com.example.kashishgupta.hungerbite;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -30,10 +32,16 @@ public class FirstActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first);
+        Intent rcv = getIntent();
+        String Locna= rcv.getStringExtra("Lpk");
         ButterKnife.bind(this);
+        Bundle bundle = new Bundle();
+        bundle.putString("Lpk", Locna);
+
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         Fragment fragment = new RestaurantFragment();
+        fragment.setArguments(bundle);
         fragmentTransaction.add(R.id.root,fragment);
         fragmentTransaction.commit();
 
@@ -51,4 +59,5 @@ public class FirstActivity extends AppCompatActivity {
                 .setClosedOnStart(true)
                 .build();
     }
+
 }

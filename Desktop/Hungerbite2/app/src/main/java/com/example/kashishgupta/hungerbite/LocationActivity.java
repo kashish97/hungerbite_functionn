@@ -1,10 +1,13 @@
 package com.example.kashishgupta.hungerbite;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.Uri;
 import android.nfc.Tag;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -33,7 +36,7 @@ import java.util.Locale;
 
 
 public class LocationActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,ActivityCompat.OnRequestPermissionsResultCallback {
+        GoogleApiClient.OnConnectionFailedListener,ActivityCompat.OnRequestPermissionsResultCallback , hellofragment.OnFragmentInteractionListener{
     GoogleApiClient mGoogleApiClient;
     private static final String TAG = LocationActivity.class.getSimpleName();
     double latitude;
@@ -99,9 +102,12 @@ public class LocationActivity extends AppCompatActivity implements GoogleApiClie
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent inti= new Intent(LocationActivity.this,FirstActivity.class);
-                startActivity(inti);
-                inti.putExtra("Location",ab);
+                Bundle bundle = new Bundle();
+                bundle.putString("Lpk", ab);
+
+// Your fragment
+                hellofragment obj = new hellofragment();
+                obj.setArguments(bundle);
 
 
                 //showToast("Proceed to the next step");
@@ -153,18 +159,25 @@ public class LocationActivity extends AppCompatActivity implements GoogleApiClie
             String blah = address;
 
             String [] parts = blah.split(","); //all parts stored in an array
-     System.out.println("parts : " + parts[2]);
             //Printing the array to show you the array content.
             for(String s : parts) {
                 System.out.println("parts : " + s);
             }
-            ab=parts[2];
-            Bundle bundle = new Bundle();
-            bundle.putString("Location", ab);
+            ab=parts[1];
 
-// Your fragment
-            RestaurantFragment obj = new RestaurantFragment();
-            obj.setArguments(bundle);
+            System.out.println("parts : " + ab);
+
+            Intent i= new Intent(LocationActivity.this,FirstActivity.class);
+            i.putExtra("Lpk", ab);
+            startActivity(i);
+
+// set MyFragment Arguments
+           // FragmentManager fragmentManager = getFragmentManager();
+            //android.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            // Fragment fragment = new hellofragment();
+            //fragment.setArguments(bundle);
+            //fragmentTransaction.add(R.id.abe,fragment);
+            //fragmentTransaction.commit();
 
 
 
@@ -214,6 +227,12 @@ public class LocationActivity extends AppCompatActivity implements GoogleApiClie
     }
 
 
-}}
+}
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+}
 
 
