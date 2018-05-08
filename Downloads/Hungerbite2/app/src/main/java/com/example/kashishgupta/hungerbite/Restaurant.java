@@ -49,8 +49,10 @@ public class Restaurant {
     String imgurl;
     String Resid;
     String Locid;
+    String time;
+    String delivery;
 
-    public Restaurant(String restname, String restcityname, String restlocname, String minorder, String imgurl, String resid, String locid) {
+    public Restaurant(String restname, String restcityname, String restlocname, String minorder, String imgurl, String resid, String locid, String time, String delivery) {
         this.restname = restname;
         this.restcityname = restcityname;
         this.restlocname = restlocname;
@@ -58,6 +60,24 @@ public class Restaurant {
         this.imgurl = imgurl;
         Resid = resid;
         Locid = locid;
+        this.time = time;
+        this.delivery = delivery;
+    }
+
+    public String getDelivery() {
+        return delivery;
+    }
+
+    public void setDelivery(String delivery) {
+        this.delivery = delivery;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public String getResid() {

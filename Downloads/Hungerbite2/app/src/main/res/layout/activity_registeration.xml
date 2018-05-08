@@ -61,7 +61,7 @@
 
     <Button
         android:id="@+id/buttonsubmit"
-        android:layout_width="match_parent"
+        android:layout_width="167dp"
         android:layout_height="wrap_content"
         android:text="Button" />
 

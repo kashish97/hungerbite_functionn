@@ -9,13 +9,24 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Handler;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -26,6 +37,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.shashank.sony.fancygifdialoglib.FancyGifDialog;
+import com.shashank.sony.fancygifdialoglib.FancyGifDialogListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,6 +59,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static android.widget.LinearLayout.HORIZONTAL;
+
 
 public class RestaurantFragment extends Fragment {
 
@@ -55,17 +70,23 @@ public class RestaurantFragment extends Fragment {
     public static final int READ_TIMEOUT = 15000;
     private RecyclerView mRVFish;
     private RestaurantRecycler mAdapter;
+    ArrayAdapter<String> ad;
     List<Restaurant> data;
-
-
+ArrayList<String> nei;
+ListView lv;
     View view ;
+    String t;
 
+    int c;
+TextView tto,tvtotal;
     String Loc;
+    SearchView sv;
 
     String URL_PRODUCTS="http://hungerbite.com/hungerbite_app/abc.php";
     RecyclerView.Adapter recyclerViewadapter;
-
+ArrayList<String> ar;
     RequestQueue requestQueue;
+    AutoCompleteTextView lo;
     StringRequest stringRequest;
 
 
@@ -86,6 +107,9 @@ public class RestaurantFragment extends Fragment {
 
         if (getArguments() != null) {
             Loc = getArguments().getString("Lpk");
+            ar = getArguments().getStringArrayList("nm");
+           // tto.setText(""+c);
+
             //mParam2 = getArguments().getString(ARG_PARAM2);
 
         }
@@ -115,22 +139,26 @@ public class RestaurantFragment extends Fragment {
                         // accessing each item in the array
                         String r1 = json_data.optString("name");
                         String r2 = json_data.optString("res_address");
-                        String r3 = json_data.optString("");
+                        String r3 = json_data.optString("city");
                         String r4 = json_data.optString("minimum_order");
                         String r5 = json_data.optString("logo");
                         String r6 = json_data.optString("locid");
                         String r7 = json_data.optString("restid");
+                        String r8 = json_data.optString("time");
+                        String r9 = json_data.optString("del");
 
-                        Restaurant fishData = new Restaurant(r1, r2, r3, r4, r5 ,r6,r7 );
+                        Restaurant fishData = new Restaurant(r1, r2, r3, r4, r5 ,r6,r7 ,r8,r9);
 
                         data.add(fishData);
                     }
 
                     // Setup and Handover data to recyclerview
+
                     mAdapter = new RestaurantRecycler(getActivity(), data);
                     mRVFish.setAdapter(mAdapter);
-                    mRVFish.setLayoutManager(new LinearLayoutManager(getActivity()));
-                    //...
+                    t = ""+mAdapter.getItemCount();
+                    tvtotal.setText(""+t +" "+"Restaurants");
+
 
                 }catch (Exception e){
                     e.printStackTrace();
@@ -147,30 +175,205 @@ public class RestaurantFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String,String> map = new HashMap<>();
-                map.put("location",Loc);
+                map.put("location",lo.getText().toString().toLowerCase().trim());
                 return map;
             }
         }
         ;
         requestQueue.add(stringRequest);
     }
+    void retriveLocation(){
+        requestQueue = Volley.newRequestQueue(getActivity());
+        stringRequest = new StringRequest(Request.Method.POST, "http://hungerbite.com/hungerbite_app/searchview.php"
+                , new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
 
-    @Override
+                //Toast.makeText(getApplicationContext(),"Response: "+response,Toast.LENGTH_LONG).show();
+
+                if (response.equalsIgnoreCase("No data found")) {
+                    Toast.makeText(getActivity(), "Login Failed " + response, Toast.LENGTH_LONG).show();
+
+                } else {
+
+                    // Toast.makeText(getActivity(), "Response: " + response, Toast.LENGTH_LONG).show();
+
+                    System.out.println(response);
+                    JSONArray JA = null;
+                    try {
+                        JA = new JSONArray(response);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    JSONObject json = null;
+                    final String[] str1 = new String[JA.length()];
+
+                    for (int i = 0; i < JA.length(); i++) {
+                        try {
+                            json = JA.getJSONObject(i);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            str1[i] = json.getString("name");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    for (int i = 0; i < str1.length; i++) {
+                        nei.add(str1[i]);
+                    }
+
+
+                    ArrayAdapter<String> ad = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, nei);
+
+
+                   // lv.setAdapter(ad);
+                    }}}
+
+                ,new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getActivity(), "Error: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                    }});
+
+
+
+        requestQueue.add(stringRequest);
+            }
+        @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View v= inflater.inflate(R.layout.fragment_restaurant, container, false);
-        System.out.print("View created");
+            // Inflate the layout for this fragment
+            View v = inflater.inflate(R.layout.fragment_restaurant, container, false);
+            System.out.print("View created");
+            final SearchView searchView=(SearchView) v.findViewById(R.id.sear);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    searchView.clearFocus();
+                }
+            }, 300);
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    processQuery(query);
+                    return true;
+                }
 
-        mRVFish = (RecyclerView) v.findViewById(R.id.recycle1);
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    processQuery(newText);
 
-        retrieveRestaurants();
+                    return false;
+                }
+            });
+RelativeLayout rl = (RelativeLayout) v.findViewById(R.id.rl);
+rl.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        lo.setCursorVisible(true);
+        lo.setFocusableInTouchMode(true);
+        lo.setInputType(InputType.TYPE_CLASS_TEXT);
+        lo.requestFocus(); //to trigger the soft input
+
+    }
+});
+TextView tvfil = (TextView) v.findViewById(R.id.tvfilter);
+tvfil.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        new FancyGifDialog.Builder(getActivity())
+                .setTitle("Granny eating chocolate dialog box")
+                .setMessage("This is a granny eating chocolate dialog box. This library is used to help you easily create fancy gify dialog.")
+                .setNegativeBtnText("Cancel")
+                .setPositiveBtnBackground("#FF4081")
+                .setPositiveBtnText("Ok")
+                .setNegativeBtnBackground("#FFA9A7A8")
+
+                .setGifResource(R.drawable.gif1)   //Pass your Gif here
+                .isCancellable(true)
+                .OnPositiveClicked(new FancyGifDialogListener() {
+                    @Override
+                    public void OnClick() {
+                        Toast.makeText(getActivity(),"Ok",Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .OnNegativeClicked(new FancyGifDialogListener() {
+                    @Override
+                    public void OnClick() {
+                        Toast.makeText(getActivity(),"Cancel",Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .build();
+
+    }
+});
+            mRVFish = (RecyclerView) v.findViewById(R.id.recycle1);
+            tvtotal = (TextView) v.findViewById(R.id.total);
+          //  lv = (ListView) v.findViewById(R.id.lvi);
+            nei = new ArrayList<String>();
+            mRVFish.setHasFixedSize(true);
+            mRVFish.setLayoutManager(new LinearLayoutManager(getActivity()));
+            DividerItemDecoration itemDecor = new DividerItemDecoration(getActivity(), HORIZONTAL);
+            mRVFish.addItemDecoration(itemDecor);
+            lo = (AutoCompleteTextView) v.findViewById(R.id.loct);
+            lo.setText(Loc);
+            lo.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after)
+
+                {
+
+                }
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    retrieveRestaurants();
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+             ad = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, ar);
+            Toast.makeText(getActivity(),""+c,Toast.LENGTH_LONG).show();
+
+//tto.setText(c);
+            lo.setThreshold(1);
+            lo.setAdapter(ad);
+            retrieveRestaurants();
+            if (lo.hasFocus() == true) {
+                retrieveRestaurants();
+            }
 
 
-        return v;
+            return v;
+        }
+    private void processQuery(String query) {
+        // in real app you'd have it instantiated just once
+        List<Restaurant> result = new ArrayList<>();
+
+        // case insensitive search
+        for (Restaurant country : data) {
+            if (country.getRestname().toLowerCase().contains(query)) {
+                result.add(country);
+            }
+            else if (country.getRestcityname().toLowerCase().contains(query)){
+                result.add(country);
+
+            }}
+
+        mAdapter.setRestaurantList(result);
     }
 
+}
 
-    }
+
+
+
+
+
 
 

@@ -13,7 +13,6 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-
     <style name="AppTheme.PopupOverlay" parent="android:Theme" />
     <style name="LinearLayout.GuillotineItem">
         <item name="android:layout_width">match_parent</item>
@@ -48,7 +47,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:windowNoTitle">true</item>
-        <item name="android:background">@color/guillotine_background</item>
+        <item name="android:background">@color/guillotine_background_dark</item>
     </style>
 
     <style name="ImageView" />
@@ -70,4 +69,5 @@
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:layout_marginLeft">@dimen/guillotine_large_margin</item>
     </style>
+
 </resources>

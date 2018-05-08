@@ -2,11 +2,21 @@
 
     <style name="AppTheme" parent="Theme.Guillotine"/>
 
-    <style name="Theme.Guillotine" parent="android:Theme">
+
+    <style name="Theme.Guillotine" parent="Theme.AppCompat">
         <item name="android:colorPrimaryDark">@color/guillotine_background</item>
         <item name="android:colorPrimary">@color/guillotine_background_dark</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowActionBar">false</item>
     </style>
+
+    <style name="Widget.CardContent" parent="android:Widget">
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:paddingTop">24dp</item>
+        <item name="android:paddingBottom">24dp</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
 </resources>

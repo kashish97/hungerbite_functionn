@@ -18,7 +18,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".LoginActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".LocationActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -28,14 +28,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RegisterationActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".RegisterationActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".FirstActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".MenuActivity"
-            android:label="@string/title_activity_menu" />
+            android:label="@string/title_activity_menu"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <provider
             android:name=".UserContentProvider"
@@ -47,10 +49,20 @@
             android:name=".ShowCartActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".CheckoutActivity" />
-        <activity android:name=".CheckoutFormActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+        <activity
+            android:name=".CheckoutFormActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
 
-        </activity>
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
+        <activity
+            android:name=".TestActivity"
+            android:label="@string/title_activity_test" />
+        <activity
+            android:name=".ScrollingActivity"
+            android:label="@string/title_activity_scrolling"></activity>
     </application>
 
 </manifest>

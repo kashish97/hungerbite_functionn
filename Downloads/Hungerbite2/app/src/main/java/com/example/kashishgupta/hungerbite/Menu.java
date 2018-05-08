@@ -12,9 +12,17 @@ String foodname;
 String fpricediscounted;
 String fpriceoriginal;
 String fooddescription;
+String veg;
 
+    public String getVeg() {
+        return veg;
+    }
 
-    public Menu(String resName, String resAddress, String city, String logo, String location, String minorder, String category, String foodname, String fpricediscounted, String fpriceoriginal, String fooddescription) {
+    public void setVeg(String veg) {
+        this.veg = veg;
+    }
+
+    public Menu(String resName, String resAddress, String city, String logo, String location, String minorder, String category, String foodname, String fpricediscounted, String fpriceoriginal, String fooddescription, String veg) {
         ResName = resName;
         ResAddress = resAddress;
         this.city = city;
@@ -26,6 +34,7 @@ String fooddescription;
         this.fpricediscounted = fpricediscounted;
         this.fpriceoriginal = fpriceoriginal;
         this.fooddescription = fooddescription;
+        this.veg = veg;
     }
 
     public Menu() {

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="preloaded_fonts" translatable="false">
+        <item>@font/alegreya_sc</item>
+        <item>@font/allerta</item>
+        <item>@font/amethysta</item>
+        <item>@font/amita</item>
+        <item>@font/andada</item>
+        <item>@font/armata</item>
+        <item>@font/average</item>
+        <item>@font/coustard</item>
+        <item>@font/montserrat</item>
+        <item>@font/montserrat_alternates</item>
+        <item>@font/montserrat_bold</item>
+        <item>@font/neuton_extralight</item>
+        <item>@font/wendy_one</item>
+    </array>
+</resources>
