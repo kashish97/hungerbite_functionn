@@ -10,7 +10,7 @@
     <com.github.florent37.materialtextfield.MaterialTextField
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-
+android:layout_marginTop="100dp"
         app:mtf_image="@drawable/ic_launcher_background"
         app:mtf_labelColor="#666"
         tools:layout_editor_absoluteX="26dp"

@@ -3,7 +3,25 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="guillotine_background">#444153</color>
-    <color name="guillotine_background_dark">#383547</color>
+    <color name="guillotine_background">#eeedf2</color>
+    <color name="guillotine_background_dark"> #a3dcb6</color>
     <color name="selected_item_color">#30d1d5</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#050000</color>
+    <color name="lightg">#a3dcb6</color>
+    <color name="yellow">#efe499</color>
+    <color name="hunger">#ff6f43</color>
+    <color name="black_semi_transparent">#B2000000</color>
+    <color name="background">#e5e5e5</color>
+    <color name="half_black">#818181</color>
+    <color name="white_pressed">#f1f1f1</color>
+    <color name="pink">#e91e63</color>
+    <color name="pink_pressed">#ec407a</color>
+    <color name="blue_semi_transparent">#805677fc</color>
+    <color name="blue_semi_transparent_pressed">#80738ffe</color>
+    <color name="bll">#3c3e87</color>
+    <color name="b">#e4e0df</color>
+    <color name="g">#249b20</color>
+
+
 </resources>

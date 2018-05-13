@@ -2,12 +2,128 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".RestaurantFragment">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".RestaurantFragment"
+    android:background="@color/b"
+    android:layout_marginTop="20dp">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycle1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="94dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="39dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="29dp">
+
+                            <ImageView
+                                android:id="@+id/imageView"
+                                android:layout_width="55dp"
+                                android:layout_height="match_parent"
+                                android:layout_alignParentStart="true"
+                                android:layout_alignParentTop="true"
+                                android:layout_gravity="right"
+                                android:layout_marginStart="35dp"
+                                android:layout_weight="1"
+                                android:src="@drawable/pullll" />
+
+                            <AutoCompleteTextView
+                                android:id="@+id/loct"
+                                android:layout_width="195dp"
+                                android:layout_height="match_parent"
+                                android:layout_alignParentStart="true"
+                                android:layout_alignParentTop="true"
+                                android:layout_gravity="left"
+                                android:layout_marginStart="85dp"
+                                android:background="@null"
+                                android:editable="true"
+                                android:ems="13"
+                                android:paddingRight="8dp"
+                                android:textAlignment="center"
+                                android:textColor="@color/bll"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:layout_width="96dp"
+                                android:layout_height="match_parent"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentTop="true"
+                                android:layout_marginTop="5dp"
+                                android:textStyle="bold"
+
+                                android:layout_gravity="left"
+                                android:paddingRight="8dp"
+                                android:text="   CHANGE"
+                                android:textColor="@color/g" />
+                        </RelativeLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <android.support.v7.widget.SearchView
+                    android:id="@+id/sear"
+                    android:layout_width="350dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="8dp"
+                    android:autofillHints="Search for Restaurants,Cusisines"
+                    android:background="@drawable/roundsearch"
+                    android:focusable="true"
+                    app:queryHint="Search For Restaurants,Cuisines,..">
+
+                </android.support.v7.widget.SearchView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="182dp"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/lvi"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/half_black">
+
+            </ListView>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycle1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"></android.support.v7.widget.RecyclerView>
+
+        </LinearLayout>
+    </RelativeLayout>
 </FrameLayout>

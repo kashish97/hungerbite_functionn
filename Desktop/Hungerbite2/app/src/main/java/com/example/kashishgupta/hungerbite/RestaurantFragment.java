@@ -9,15 +9,22 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -41,7 +48,11 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static android.widget.LinearLayout.HORIZONTAL;
 
 
 public class RestaurantFragment extends Fragment {
@@ -52,16 +63,22 @@ public class RestaurantFragment extends Fragment {
     public static final int READ_TIMEOUT = 15000;
     private RecyclerView mRVFish;
     private RestaurantRecycler mAdapter;
+    ArrayAdapter<String> ad;
     List<Restaurant> data;
-
-
+ArrayList<String> nei;
+ListView lv;
     View view ;
-
+int c;
+TextView tto;
     String Loc;
+    SearchView sv;
 
-String URL_PRODUCTS="http://hungerbite.com/hungerbite_app/abc.php";
+    String URL_PRODUCTS="http://hungerbite.com/hungerbite_app/abc.php";
     RecyclerView.Adapter recyclerViewadapter;
-
+ArrayList<String> ar;
+    RequestQueue requestQueue;
+    AutoCompleteTextView lo;
+    StringRequest stringRequest;
 
 
     public static RestaurantFragment newInstance(String param1, String param2) {
@@ -81,190 +98,206 @@ String URL_PRODUCTS="http://hungerbite.com/hungerbite_app/abc.php";
 
         if (getArguments() != null) {
             Loc = getArguments().getString("Lpk");
+            ar = getArguments().getStringArrayList("nm");
+           // tto.setText(""+c);
+
             //mParam2 = getArguments().getString(ARG_PARAM2);
 
         }
-        Toast.makeText(getActivity(), Loc, Toast.LENGTH_LONG).show();
+       // Toast.makeText(getActivity(), Loc, Toast.LENGTH_LONG).show();
     }
 
 
 
 
 
+    void retrieveRestaurants(){
+        //pd.show();
+        requestQueue = Volley.newRequestQueue(getActivity());
+        stringRequest = new StringRequest(Request.Method.POST, URL_PRODUCTS
+        , new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+               // Toast.makeText(getActivity(),"Response: "+response,Toast.LENGTH_LONG).show();
+                data = new ArrayList<>();
 
 
-    private class AsyncFetch extends AsyncTask<String, String, String> {
+                try{
 
-        ProgressDialog pdLoading = new ProgressDialog(getActivity());
-        HttpURLConnection conn;
-        URL url = null;
-        String searchQuery;
-
-        public AsyncFetch(String searchQuery) {
-            this.searchQuery = searchQuery;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            //this method will be running on UI thread
-            pdLoading.setMessage("\tLoading...");
-            pdLoading.setCancelable(false);
-            pdLoading.show();
-
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            try {
-
-                // Enter URL address where your php file resides
-                url = new URL("http://hungerbite.com/hungerbite_app/abc.php");
-
-            } catch (MalformedURLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            try {
-
-                System.out.print("preee k try m");
-                // Setup HttpURLConnection class to send and receive data from php and mysql
-                conn = (HttpURLConnection) url.openConnection();
-                conn.setReadTimeout(30000);
-                conn.setConnectTimeout(30000);
-                conn.setRequestMethod("GET");
-
-                // setDoInput and setDoOutput to true as we send and recieve data
-                conn.setDoInput(true);
-                conn.setDoOutput(true);
-
-                // add parameter to our above url
-                Uri.Builder builder = new Uri.Builder()
-                        .appendQueryParameter("location", Loc);
-                String query = builder.build().getEncodedQuery();
-
-                OutputStream os = conn.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-                writer.write(query);
-                writer.flush();
-                writer.close();
-                os.close();
-                conn.connect();
-
-            } catch (IOException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-                }
-
-            try {
-
-                int response_code = conn.getResponseCode();
-
-                // Check if successful connection made
-                if (response_code == HttpURLConnection.HTTP_OK) {
-
-                    // Read data sent from server
-                    InputStream input = conn.getInputStream();
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-                    StringBuilder result = new StringBuilder();
-                    String line;
-
-                    while ((line = reader.readLine()) != null) {
-                        result.append(line);
-                    }
-
-                    // Pass data to onPostExecute method
-                    return (result.toString());
-
-                } else {
-                    return ("Connection error");
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                return e.toString();
-            } finally {
-                conn.disconnect();
-                System.out.print("m yha se gya");
-            }
-
-
-        }
-        @Override
-        protected void onPostExecute(String result) {
-
-            //this method will be running on UI thread
-            pdLoading.dismiss();
-
-            System.out.print("m here..");
-
-            pdLoading.dismiss();
-            data = new ArrayList<>();
-
-
-            if (result.equals("No data found")) {
-                Toast.makeText(getActivity(), "No Results found for entered query", Toast.LENGTH_LONG).show();
-            } else {
-
-                try {
-
-                    String abc = result.toString();
-                    JSONObject json = new JSONObject(result);
-                    org.json.JSONArray jArray = json.getJSONArray("results");
-
-
-                    // Extract data from json and store into ArrayList as class objects
-                    for (int i = 0; i < jArray.length(); i++) {
-                        JSONObject json_data = jArray.getJSONObject(i);
+                    JSONArray jsonArray = new JSONArray(response);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject json_data = jsonArray.getJSONObject(i);
                         // accessing each item in the array
                         String r1 = json_data.optString("name");
                         String r2 = json_data.optString("res_address");
                         String r3 = json_data.optString("city");
                         String r4 = json_data.optString("minimum_order");
                         String r5 = json_data.optString("logo");
-                        Restaurant fishData = new Restaurant(r1, r2, r3, r4, r5);
+                        String r6 = json_data.optString("locid");
+                        String r7 = json_data.optString("restid");
+                        String r8 = json_data.optString("time");
+
+                        Restaurant fishData = new Restaurant(r1, r2, r3, r4, r5 ,r6,r7 ,r8);
 
                         data.add(fishData);
                     }
 
                     // Setup and Handover data to recyclerview
+
                     mAdapter = new RestaurantRecycler(getActivity(), data);
                     mRVFish.setAdapter(mAdapter);
-                    mRVFish.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-                } catch (JSONException e) {
-                    // You to understand what actually error is and handle it appropriately
-                    Toast.makeText(getActivity(), e.toString(), Toast.LENGTH_LONG).show();
-                    System.out.println(e.toString());
-                    Toast.makeText(getActivity(), result.toString(), Toast.LENGTH_LONG).show();
+                    //...
+
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
-
             }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getActivity(),"Error: "+error.getMessage(),Toast.LENGTH_LONG).show();
+                error.printStackTrace();
+            }
+        })
+        {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String,String> map = new HashMap<>();
+                map.put("location",lo.getText().toString().toLowerCase().trim());
+                return map;
+            }
+        }
+        ;
+        requestQueue.add(stringRequest);
+    }
+    void retriveLocation(){
+        requestQueue = Volley.newRequestQueue(getActivity());
+        stringRequest = new StringRequest(Request.Method.POST, "http://hungerbite.com/hungerbite_app/searchview.php"
+                , new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
 
-        }}
-    @Override
+                //Toast.makeText(getApplicationContext(),"Response: "+response,Toast.LENGTH_LONG).show();
+
+                if (response.equalsIgnoreCase("No data found")) {
+                    Toast.makeText(getActivity(), "Login Failed " + response, Toast.LENGTH_LONG).show();
+
+                } else {
+
+                    // Toast.makeText(getActivity(), "Response: " + response, Toast.LENGTH_LONG).show();
+
+                    System.out.println(response);
+                    JSONArray JA = null;
+                    try {
+                        JA = new JSONArray(response);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    JSONObject json = null;
+                    final String[] str1 = new String[JA.length()];
+
+                    for (int i = 0; i < JA.length(); i++) {
+                        try {
+                            json = JA.getJSONObject(i);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            str1[i] = json.getString("name");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    for (int i = 0; i < str1.length; i++) {
+                        nei.add(str1[i]);
+                    }
+
+
+                    ArrayAdapter<String> ad = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, nei);
+
+
+                    lv.setAdapter(ad);}}}
+
+                ,new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getActivity(), "Error: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                    }});
+
+
+
+        requestQueue.add(stringRequest);
+            }
+        @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View v= inflater.inflate(R.layout.fragment_restaurant, container, false);
-        System.out.print("View created");
+            // Inflate the layout for this fragment
+            View v = inflater.inflate(R.layout.fragment_restaurant, container, false);
+            System.out.print("View created");
 
-        mRVFish = (RecyclerView) v.findViewById(R.id.recycle1);
+            SearchView searchView=(SearchView) v.findViewById(R.id.sear);
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    processQuery(query);
+                    return true;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    processQuery(newText);
+
+                    return false;
+                }
+            });
 
 
-        new AsyncFetch(Loc).execute();
+            mRVFish = (RecyclerView) v.findViewById(R.id.recycle1);
+            lv = (ListView) v.findViewById(R.id.lvi);
+            nei = new ArrayList<String>();
+            mRVFish.setHasFixedSize(true);
+            mRVFish.setLayoutManager(new LinearLayoutManager(getActivity()));
+            DividerItemDecoration itemDecor = new DividerItemDecoration(getActivity(), HORIZONTAL);
+            mRVFish.addItemDecoration(itemDecor);
+            lo = (AutoCompleteTextView) v.findViewById(R.id.loct);
+            lo.setText(Loc);
+             ad = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, ar);
+
+            Toast.makeText(getActivity(),""+c,Toast.LENGTH_LONG).show();
+
+//tto.setText(c);
+            lo.setThreshold(1);
+            lo.setAdapter(ad);
+            retrieveRestaurants();
+            if (lo.hasFocus() == true) {
+                retrieveRestaurants();
+            }
 
 
+            return v;
+        }
+    private void processQuery(String query) {
+        // in real app you'd have it instantiated just once
+        List<Restaurant> result = new ArrayList<>();
 
+        // case insensitive search
+        for (Restaurant country : data) {
+            if (country.getRestname().toLowerCase().contains(query)) {
+                result.add(country);
+            }
+        }
 
-
-    return v;
+        mAdapter.setRestaurantList(result);
     }
 
+}
 
 
 
-    }
+
+
+
 
 

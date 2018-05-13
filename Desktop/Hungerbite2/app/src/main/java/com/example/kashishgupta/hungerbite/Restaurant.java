@@ -47,13 +47,43 @@ public class Restaurant {
     String restlocname;
     String minorder;
     String imgurl;
+    String Resid;
+    String Locid;
+    String time;
 
-    public Restaurant(String restname, String restcityname, String restlocname, String minorder, String imgurl) {
+    public Restaurant(String restname, String restcityname, String restlocname, String minorder, String imgurl, String resid, String locid, String time) {
         this.restname = restname;
         this.restcityname = restcityname;
         this.restlocname = restlocname;
         this.minorder = minorder;
         this.imgurl = imgurl;
+        Resid = resid;
+        Locid = locid;
+        this.time = time;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public String getResid() {
+        return Resid;
+    }
+
+    public void setResid(String resid) {
+        Resid = resid;
+    }
+
+    public String getLocid() {
+        return Locid;
+    }
+
+    public void setLocid(String locid) {
+        Locid = locid;
     }
 
     public Restaurant() {

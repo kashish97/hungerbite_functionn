@@ -2,7 +2,7 @@
 
     <style name="AppTheme" parent="Theme.Guillotine"/>
 
-    <style name="Theme.Guillotine" parent="android:Theme">
+    <style name="Theme.Guillotine" parent="Theme.AppCompat">
         <item name="android:colorPrimaryDark">@color/guillotine_background</item>
         <item name="android:colorPrimary">@color/guillotine_background_dark</item>
         <item name="android:windowContentOverlay">@null</item>
